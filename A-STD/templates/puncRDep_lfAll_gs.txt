@@ -1,0 +1,251 @@
+::derived from rmVlen1.2_commRight.txt 
+:: now we add leaf copy
+::lines start with "::" are comments, note d should always be the last kernel feature
+
+q0.p
+q1.p
+q2.p
+q3.p
+s0.p
+s1.p
+s2.p
+
+:: leaf node
+s0.f
+s1.f
+s2.f
+
+s0.w
+s0.t
+s1.w
+s1.t
+q0.w
+q0.t
+q1.w
+q1.t 
+q2.w
+q2.t 
+s2.w
+s2.t 
+s0.vl 
+s1.vl 
+s1.vr 
+s0.lc0.w
+s0.lc0.t
+s0.rc0.w 
+s0.rc0.t 
+s0.lc0.l
+s0.lc1.l
+s0.lc1.w
+s0.lc1.t
+s1.lc0.l
+s1.rc0.l
+s1.lc1.l
+s1.rc1.l
+s1.lc0.t 
+s1.lc0.w
+s1.lc0.w
+s1.rc0.w
+s1.rc0.t
+s1.rc0.w
+s1.lc1.t
+s1.lc1.w
+s1.rc1.t
+s1.rc1.w
+d_s2s1
+d_s1s0
+d_s0q0
+#ComplexFeatures
+s0.w
+s0.t
+s1.w
+s1.t
+q0.w
+q0.t
+q1.t 
+s2.t 
+
+q0.p
+q1.p
+q2.p
+q3.p
+s0.p
+s1.p
+s2.p
+
+:: unigram
+s0.w s0.p
+s0.t s0.p
+q0.w q0.p
+q0.t q0.p
+q1.w q1.p
+q1.t q1.p
+q2.w q2.p
+q2.t q2.p
+
+::bigram
+s0.p q0.t
+s0.p q1.t
+s1.w s0.p
+s1.t s0.p
+s0.p s1.t
+s0.p s2.t
+s0.p q0.w
+s0.p q1.w
+s0.p s1.w
+s0.p s2.w
+
+:: unigram
+s0.w s0.p s0.f
+s0.t s0.p s0.f
+
+::bigram
+s0.p q0.t s0.f
+s0.p q1.t s0.f
+s1.w s0.p s0.f
+s1.t s0.p s0.f
+s0.p s1.t s0.f
+s0.p s2.t s0.f
+s0.p q0.w s0.f
+s0.p q1.w s0.f
+s0.p s1.w s0.f
+s0.p s2.w s0.f
+
+s2.p s1.p
+s1.p s0.p
+s2.p s0.p
+
+s0.p q0.p
+s0.p q1.p
+s0.p q2.p
+s2.p q0.p
+s1.p q1.p
+
+:: comma, taking right dependent
+s1.p s0.t
+s1.p s1.t s0.t
+
+s2.p s1.t
+s2.p s2.t s1.t
+
+s2.p s0.t
+s2.p s2.t s0.t
+
+s1.f s1.p s0.t
+s1.f s1.p s1.t s0.t
+
+s2.f s2.p s1.t
+s2.f s2.p s2.t s1.t
+
+s2.f s2.p s0.t
+s2.f s2.p s2.t s0.t
+
+
+:: more unigram to evaluate the global structure
+s0.w s0.lc0.w
+s0.w s0.rc0.w
+s0.w s0.lc0.w s0.rc0.w
+
+s0.t s0.lc0.t
+s0.t s0.rc0.t
+s0.t s0.lc0.t s0.rc0.t
+
+s1.w s1.lc0.w
+s1.w s1.rc0.w
+s1.w s1.lc0.w s0.rc0.w
+
+s1.t s1.lc0.t
+s1.t s1.rc0.t
+s1.t s1.lc0.t s0.rc0.t
+
+
+s0.lc0.w
+s0.lc0.t
+s0.rc0.w 
+s0.rc0.t 
+
+s0.lc0.l
+s0.lc1.l
+
+s0.lc1.w
+s0.lc1.t
+
+s1.lc0.l
+s1.rc0.l
+s1.lc1.l
+s1.rc1.l
+
+s1.lc0.t 
+s1.lc0.w
+s1.rc0.t
+s1.rc0.w
+
+s1.lc1.t
+s1.lc1.w
+s1.rc1.t
+s1.rc1.w
+
+s0.w s0.t
+s1.w s1.t
+q0.w q0.t
+s0.w s1.w
+s0.t s1.t
+s0.t q0.t
+
+:: more bigram
+s1.t q0.t
+s1.t q1.t
+s2.t s0.t
+s2.t q0.t
+
+s1.w s0.t
+s1.t s0.w
+s0.w q0.w
+s0.t q0.w
+s0.w q0.t
+
+:::::
+s0.w s0.t s1.t
+s0.t s1.w s1.t
+s0.w s1.w s1.t
+s0.w s0.t s1.w
+s0.w s0.t s1.w s1.t
+s0.t q0.t q1.t
+s1.t s0.t q0.t
+s0.w q0.t q1.t
+s1.t s0.w q0.t
+::::
+s1.t s1.rc0.t s0.t
+s1.t s1.lc0.t s0.t
+s1.t s1.rc0.t s0.w
+s1.t s1.lc0.t s0.w
+s1.t s0.t s0.rc0.t
+s1.t s0.w s0.lc0.t
+s2.t s1.t s0.t
+
+
+:::: from word pairs features of ZH
+
+:::: from tree words
+::s1h0.t s1.t s0.t
+::s0h0.t s0.t s0.t
+
+:::: distance features
+d_s2s1 s2.w s1.w
+d_s1s0 s1.w s0.w
+d_s0q0 s0.w q0.w
+
+d_s2s1 s2.t s1.t
+d_s1s0 s1.t s0.t
+d_s0q0 s0.t q0.t
+
+:::: verlence features
+s0.w s0.vl
+s0.t s0.vl
+s1.w s1.vr
+s1.t s1.vr
+s1.w s1.vl
+s1.t s1.vl
+::::
+
+

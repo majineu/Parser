@@ -1,0 +1,35 @@
+trainPath						/Users/Ji/Data/Parsing/wsj/wsj02-21.malt.auto.mod
+devPath							/Users/Ji/Data/Parsing/wsj/wsj22.malt.auto
+testPath						/Users/Ji/Data/Parsing/wsj/wsj23.malt.auto
+
+modelPath						models/en/
+::templatePath				templates/puncRDep_LAtt_lf_gs.txt
+templatePath				templates/puncRDep_LAtt_gs.txt
+
+nRound							30
+nBeamSize						1	
+
+:: can be either top_one, all,  
+prefix							RMNearBE_SepOnly_noHpy	
+
+:: dynamic oracle related stuff
+bPVerbose						false	
+bFVerbose						false	
+bPunc								false	
+bEng								true
+
+
+::bAddNonSepPunc			false
+::bIgnoreLastPunc			false	
+::bRmNonPunc					false
+
+bAddNonSepPunc			true
+bIgnoreLastPunc			true	
+bRmNonPunc					false	
+vBoundaryPairs			-B- -E- ``  ''  -LRB- -RRB- 
+
+nRetry							1	
+logDir  						logs/
+
+
+
