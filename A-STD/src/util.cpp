@@ -1,3 +1,4 @@
+#include <cassert>
 #include "util.h"
 vector<wchar_t *> Split(wchar_t *pBuf, const wchar_t *pDelem)
 {
@@ -48,9 +49,7 @@ vector<char *> Split(char *pBuf, const char *pDelem)
 wchar_t *copyWcs(const wchar_t *pwzStr, 
 								 CPool *pPool)
 {
-	if (pwzStr == NULL)
-		throw("Error: copy null str\n");
-
+	assert(pwzStr != NULL);
 	wchar_t *pwzRes = NULL;
 	if (pPool == NULL)
 		pwzRes = new wchar_t[wcslen(pwzStr) + 1];

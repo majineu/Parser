@@ -5,7 +5,7 @@ const wchar_t *CFeatureCollector::pSigEnd = L"</s>";
 
 CFeatureCollector::
 CFeatureCollector(bool insertMode)//, bool useDis):
-:m_insertMode(insertMode), m_nKernel(0), m_gID(10)
+:m_iMode(insertMode), m_nKernel(0), m_gID(10)
 {
 	m_verbose = false;
 }
@@ -29,24 +29,18 @@ ReadTemplate(const string & strFile)
 	while (fgets(buf,  CFeatureCollector::MAX_BUF_LEN, fp))
 	{
 		removeNewLine(buf);
-		if (strlen(buf) == 0 || strstr(buf, "::")) 
+		if (strlen(buf) == 0 || strstr(buf, "::") == buf) 
 			continue;
 	
-		for (int i = strlen(buf) - 1; i >= 0; --i)
-			if (buf[i] == ' ' || buf[i] == '\t')
-				buf[i] = '\0';
-			else
-				break;
+		int i = strlen(buf) - 1;
+		while (i >= 0 && (buf[i] == ' '|| buf[i] == '\t'))
+			buf[i] = '\0';
 		
 		//m_templateStrings.push_back(buf);
 		if (strcmp(buf, "#ComplexFeatures") == 0)
 		{	
 			kernelFeature = false;
 			m_nKernel = (int)m_mapK2idx.size();
-//			fprintf(stderr, "Kernels: \n");
-//			for (size_t i = 0; i < m_kerVec.size(); ++i)
-//				fprintf(stderr, "%s  ", m_kerVec[i].c_str());
-//			fprintf(stderr, "\n--------------------------\n");
 		}
 		else if (kernelFeature == true)
 		{	
@@ -68,7 +62,7 @@ ReadTemplate(const string & strFile)
 				if (m_mapK2idx.find(tokens[i]) == m_mapK2idx.end())
 				{
 					fprintf(stderr, "unknown kernel %s\n", tokens[i]);
-					throw("Error: unknown feature component");
+					exit(0);
 				}
 				kAry[numComponent ++] = m_mapK2idx[tokens[i]];
 			}
@@ -80,6 +74,7 @@ ReadTemplate(const string & strFile)
 	fclose(fp);
 	return true;
 }
+
 
 bool CFeatureCollector::
 SaveTemplateFile(const string &strPath)
@@ -137,7 +132,8 @@ GetFeatures(vector<int> &vFIDs)
 	for (size_t i = 0; i < m_vTemps.size(); ++i)
 	{
 		_TPLT *pTemp = m_vTemps[i];
-		
+	
+		// init kernels for the current template
 		for (k = 0; k < pTemp->m_nKernel; ++k)
 			if ((buf[k] = vKernels[pTemp->m_pKidxes[k]]) == -1)
 				break;
@@ -145,7 +141,7 @@ GetFeatures(vector<int> &vFIDs)
 		if (k == pTemp->m_nKernel)
 		{
 			vFIDs[i] = pTemp->GetFID(buf);
-			if (vFIDs[i] == -1 && m_insertMode == true)
+			if (vFIDs[i] == -1 && m_iMode == true)
 				vFIDs[i] = pTemp->Insert(buf, m_gID++);
 			if (m_verbose == true)
 			{
@@ -153,6 +149,7 @@ GetFeatures(vector<int> &vFIDs)
 				int idx = 0;
 				if (pTemp->m_strName.find("d_") != pTemp->m_strName.npos)
 					fprintf(stderr, "%d-", buf[idx++]);
+				
 				for (; idx < pTemp->m_nKernel; ++idx)
 					fprintf(stderr, "%s-", 
 									wstr2utf8(SSenNode::GetKey(buf[idx])).c_str());
@@ -164,6 +161,7 @@ GetFeatures(vector<int> &vFIDs)
 	if (m_verbose == true)
 		fprintf(stderr, "\n\n");
 }
+
 
 inline int
 parseDis(const char *p, CDepTree ** pTrees, 
@@ -177,6 +175,7 @@ parseDis(const char *p, CDepTree ** pTrees,
 	return -1;
 }
 
+
 inline CDepTree *
 GetChild(CDepTree *p, char dir, int cidx)
 {
@@ -185,6 +184,46 @@ GetChild(CDepTree *p, char dir, int cidx)
 	else
 		return cidx == 0 ? p->GetRC() : p->GetR2C();
 }
+
+
+inline int 
+GetKernelID(CDepTree * pTree, SSentence *pSen, char type)
+{
+	int idx = pTree->Index();
+	if (type == 'w')
+		return pSen->WID(idx);
+	
+	else if (type == 't')
+		return pSen->TID(idx);
+	
+	else if (type == 'p')
+		return pTree->PuncID();
+	
+	else if (type == 'f')
+		return pTree->IsLeaf();
+	
+	else if (type == 'l')
+	{
+		assert(pTree->GetPi() != NULL);
+		return pTree->GetDepId();
+	}
+
+	else
+	{
+		fprintf(stderr, "Error: invalid kernel type: %c\n", type);
+		exit(0);
+	}
+}
+
+void inline 
+PrintKernel(int kID)
+{
+	if (kID == -1)
+		fprintf(stderr, "\n");
+	else
+		fprintf(stderr, "%s\n", wstr2utf8(SSenNode::GetKey(kID)).c_str());
+}
+
 
 void CFeatureCollector::
 ExtractKernels(vector<int> &vKernels)
@@ -240,27 +279,14 @@ ExtractKernels(vector<int> &vKernels)
 			int len = strlen(p);
 			switch (len)
 			{
-				case 4:
+				case 4:	// s0.w  s0.t
 				{
-					int wIdx = pTrees[idx]->Index();
-					if (p[3] == 'w')
-						vKernels[i] = m_pSen->WID(wIdx);
-					else if (p[3] == 't')
-						vKernels[i] = m_pSen->TID(wIdx);
-					else if (p[3] == 'p')
-						vKernels[i] = pTrees[idx]->PuncID();
-					else if (p[3] == 'f')
-						vKernels[i] = pTrees[idx]->IsLeaf();
-					else
-						fprintf(stderr, "Unsupport kernel %s\n", p);
-
+					vKernels[i] = GetKernelID(pTrees[idx], m_pSen, p[3]);		
 					if (m_verbose == true)
-						fprintf(stderr, "%s\n",
-										vKernels[i] == -1 ? "":
-										wstr2utf8(SSenNode::GetKey(vKernels[i])).c_str());
+						PrintKernel(vKernels[i]);
 					break;
 				}
-				case 5:
+				case 5: //s0.lc  s0.rc
 				{
 					vKernels[i] = p[4] == 'l' ? pTrees[idx]->GetLCNum(): 
 																			pTrees[idx]->GetRCNum();
@@ -275,22 +301,9 @@ ExtractKernels(vector<int> &vKernels)
 					if (pChild == NULL)
 						continue;
 
-					int idx = pChild->Index();
-					if (p[7] == 'w')
-						vKernels[i] = m_pSen->WID(idx);
-					else if (p[7] == 't')
-						vKernels[i] = m_pSen->TID(idx);
-					else if (p[7] == 'p')
-						vKernels[i] = pChild->PuncID();
-					else if (p[7] == 'l')
-						vKernels[i] = pChild->GetDepId();
-					else
-						fprintf(stderr, "Unsupport kernel %s\n", p);
-					
+					vKernels[i] = GetKernelID(pChild, m_pSen, p[7]);
 					if (m_verbose == true)
-						fprintf(stderr, "%s\n",  
-										vKernels[i] == -1 ? "":
-										wstr2utf8(SSenNode::GetKey(vKernels[i])).c_str());
+						PrintKernel(vKernels[i]);
 					break;
 				}
 			}

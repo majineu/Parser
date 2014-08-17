@@ -40,11 +40,11 @@ public:
 
 private:
 	void freeBeam()																			{m_Beam.clear();}
+	void updateBeam(bool keepMaxEvent, bool verbose = false);
 	CDepTree* parsing(_SENTENCE *pSen);
 	
 	bool isGoldSurvive(CState & CandState, bool parsingComplete, 
 										 bool ignoreLabel = false);
-	bool updateBeam(bool keepMaxEvent, bool verbose = false);
 	bool updateState(CState *pState, _SENTENCE *pSen , 
 									 int classId, double outcomeScore);	
 	OUTCOME_ID updateGoldState(CDepTree * pGoldTree, CState * pGoldState, 

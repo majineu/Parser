@@ -143,7 +143,7 @@ AppendPuncs(CPool &rPool, vector<int> &vHIDs)
 	bool verbose = false;
 	if (verbose == true || contPunc)
 	{
-		fprintf(stdout, "before: %d\n", ++nContinue);
+		printf("before: %d\n", ++nContinue);
 		Display(stdout, vHIDs);
 	}
 	
@@ -201,8 +201,7 @@ AppendPuncs(CPool &rPool, vector<int> &vHIDs)
 
 	if (verbose || contPunc)// || singlePair == true)
 	{
-		fprintf(stdout, "after: length of head vec %lu\n",
-						vHIDs.size());
+		printf("Done: length of head vec %lu\n",	vHIDs.size());
 		Display(stdout, vHIDs);
 	}
 	return false;

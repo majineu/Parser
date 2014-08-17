@@ -193,9 +193,7 @@ struct SSentence
 		
 			itemVec = Split(buf, L" \t\r\n");// itemVec);
 			if (itemVec.size() != 5)
-			{
 				itemVec.push_back(nullPunc);
-			}
 
 			pSen->m_pNodes[i]->m_pwzWord = copyWcs(itemVec[_WORD], &rPool);//(wchar_t *)rPool.Allocate(sizeof(wchar_t) * (wcslen(itemVec[_WORD]) + 1) );
 			pSen->m_pNodes[i]->m_pwzTag  = copyWcs(itemVec[_TAG],  &rPool);//rPool.Allocate(sizeof(wchar_t) * (wcslen(itemVec[_TAG]) + 1));
@@ -205,10 +203,13 @@ struct SSentence
 			if (pHidxVec != NULL)
       {
         int hIdx = -1;
-        if (swscanf(itemVec[_HEAD_INDEX], L"%d", &hIdx) == 0)
-          throw("Error: failed to convert head index\n");
-        else
+        if (swscanf(itemVec[_HEAD_INDEX], L"%d", &hIdx) != 0)
           (*pHidxVec)[i] = hIdx - 1;
+        else
+				{
+					fprintf(stderr, "Error: failed to convert head index\n");
+					exit(0);
+				}
       }
 		}
 

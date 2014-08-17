@@ -205,9 +205,7 @@ ParsingHis(_SENTENCE *pSen, CDepTree *pRef, FILE *fpRes)
 		m_AccCreator.UpdateEventVec(CandState.GetAccEventPtr(), 
 																featureIdVec, goldOId);	
 			
-		if (updateBeam(keepMaxEvent, m_verbose) == false)
-			throw("ERROR: update beam failed\n");
-
+		updateBeam(keepMaxEvent, m_verbose);
 		// update number of total iteration in order to compute the averaged weight 
 		if (isGoldSurvive(CandState, step == stepNum-1, true) == false)
 		{
@@ -347,7 +345,7 @@ Parsing(_SENTENCE *pSen)
 }
 
 
-bool CSRParser::
+void CSRParser::
 updateBeam(bool training, bool verbose)
 {	
 	// ensure valid beam width
@@ -433,7 +431,6 @@ updateBeam(bool training, bool verbose)
 	}
 
 	dumpHeap(false);
-	return true;
 }
 
 

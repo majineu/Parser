@@ -88,7 +88,10 @@ SEvalRec ParsingAndEval(CSRParser &rPar,
 	if (Parsing(rPar, vSen, resHidx) == true)
 		return Eval(vSen, vTree, resHidx);
 	else
-		throw("Parsing failed\n");
+	{
+		fprintf(stderr, "Parsing failed\n");
+		exit(0);
+	}
 }
 
 bool Parsing(const char *pszModel, 

@@ -21,6 +21,8 @@ CState(CState *pState, CPool &rPool, bool cpEvent)
 		m_stack[i] = CDepTree::CopyTree(pState->m_stack[i], rPool);
 }
 
+
+
 void CState::
 DisAction(FILE *fp)
 {
@@ -39,6 +41,7 @@ DisAction(FILE *fp)
 	fprintf(fp,"\n");
 }
 	
+
 bool CState::
 IsGold(CState *pState, bool ignoreDLabel)
 {	
@@ -78,31 +81,3 @@ PrintState(vector<wstring *> *pDLabelVec, FILE *fp)
 	DisAction(fp);
 	fprintf(fp, "#######################################\n\n");
 }
-
-#if 0
-void CState::
-Append(SSentence *pSen, CPool &rPool)
-{
-	if (m_idxQ >= pSen->Length())
-		return;
-
-	int TID = pSen->TID(m_idxQ);
-	while (m_idxQ < pSen->Length() && SSenNode::IsPunc(TID))
-	{
-		if (SSenNode::IsBPunc(TID))
-		{
-			while (m_idxQ < pSen->Length() && 
-						 SSentence::IsPunc(pSen->TID(m_idxQ)))
-				m_idxQ ++;
-			if (m_idxQ < pSen->Length())
-			{
-				Shift(rPool, pSen);
-				m_stack[m_stackSize]->AddPunc(TID);
-			}
-		}
-		else
-			m_stack[m_stackSize]->AddPunc(TID); 
-	}
-}
-#endif
-

@@ -19,26 +19,27 @@ public:
 	bool ReadTemplate(const string & strFile);
 	void ExtractKernels(vector<int> &vKernels);
 	void GetFeatures(vector<int> &vFIDs);
-	vector<_TPLT *> &GetTemps()									{return m_vTemps;}
-	_SENTENCE * GetSen()												{return m_pSen;}
-	bool GetMode()															{return m_insertMode;}
-	bool Verbose()															{return m_verbose;}
-	void SetSen(_SENTENCE *pSen)								{m_pSen = pSen, m_nSenLen = pSen->Length();}
-	void SetState(CState *pStat)								{m_pState = pStat;}
-	void SetMode(bool insertMode)								{m_insertMode = insertMode;	}
-	void SetVerbose(bool v)											{m_verbose = v;}
-	void ResetMem()															{m_pool.Recycle();}
-
 	bool SaveTemplateFile(const string &strPath);
 	bool SaveFeatures(const string &strPath);
 	bool LoadFeatures(const string &strPath);
+	
+	vector<_TPLT *> &GetTemps()									{return m_vTemps;}
+	_SENTENCE * GetSen()												{return m_pSen;}
+	bool GetMode()															{return m_iMode;}
+	bool Verbose()															{return m_verbose;}
+	void SetSen(_SENTENCE *pSen)								{m_pSen = pSen, m_nSenLen = pSen->Length();}
+	void SetState(CState *pStat)								{m_pState = pStat;}
+	void SetMode(bool insertMode)								{m_iMode = insertMode;	}
+	void SetVerbose(bool v)											{m_verbose = v;}
+	void ResetMem()															{m_pool.Recycle();}
+
 
 private:
-	map<string, int>  m_mapK2idx;
-	vector<string>		m_kerVec;	
+	map<string, int>  m_mapK2idx;  // kernel to kernelID
+	vector<string>		m_kerVec;	   // kernel feature vector
 	vector<_TPLT*>		m_vTemps;
 	
-	bool							m_insertMode;
+	bool							m_iMode;     // insert mode
 	bool							m_verbose;
 	int 							m_nSenLen;
 	int 							m_nKernel;

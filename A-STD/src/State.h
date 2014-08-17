@@ -1,13 +1,18 @@
 #ifndef __STATE_H__
 #define __STATE_H__
-#define _MAX_STACK_LEN 256
-//#include "LinearTree.h"
 #include "DepTree.h"
 #include "SparseScorer.h"
-//#include "Scorer.h"
+
+
+#define MAX_STACK_LEN 256
 class CState
 {
 public:
+	CState (CState *pState, CPool &rPool, bool cpEvent);
+	CState()																								{memset(this, 0, sizeof(*this));}
+	~CState()																								{memset(this, 0, sizeof(*this));}
+	
+	
 	static CState * CopyState(CState *pState, CPool &rPool, bool cpEvent)
 	{
 		CState *pNew = (CState *)rPool.Allocate(sizeof(CState));
@@ -21,9 +26,6 @@ public:
 		new (pNew)CState();
 		return pNew;
 	}
-	CState (CState *pState, CPool &rPool, bool cpEvent);
-	CState()																								{memset(this, 0, sizeof(*this));}
-	~CState()																								{memset(this, 0, sizeof(*this));}
 
 	void DisAction(FILE *fp = stderr);	
 	void PrintState(vector<wstring *> *pVLabels = NULL,
@@ -60,8 +62,10 @@ public:
 	void ReduceLeft(int depLabelId)
 	{
 		if (m_stackSize < 2)
-			throw("Error: reduce not allowed\n");
-		
+		{
+			fprintf(stderr, "Error: reduce not allowed\n");
+			exit(0);
+		}
 		CDepTree *p0 = m_stack[--m_stackSize];
 		CDepTree *p1 = m_stack[--m_stackSize];
 		
@@ -83,8 +87,10 @@ public:
 					p0->SetPuncID(p1->PuncID());
 					p0->SetPuncNum(nSep1 - nSep0);
 				}
+				
 				else if (nSep1 < nSep0)
 					p0->SetPuncNum(nSep0 - nSep1);
+				
 				else
 				{
 					p0->SetPuncNum(0);		// actually, separator num
@@ -93,7 +99,7 @@ public:
 			}
 			else
 			{
-				// just transfer directly
+				// just propagate directly
 				p0->SetPuncID(p1->PuncID());
 				p0->SetPuncNum(nSep1);
 			}
@@ -114,7 +120,10 @@ public:
 	void ReduceRight(int depLabelId)
 	{
 		if (m_stackSize < 2)
-			throw("Error: reduce not allowed\n");
+		{
+			fprintf(stderr, "Error: reduce not allowed\n");
+			exit(0);
+		}
 		CDepTree *p0 = m_stack[--m_stackSize];
 		CDepTree *p1 = m_stack[--m_stackSize];
 
@@ -174,7 +183,7 @@ public:
 	}
 
 private:
-	CDepTree* m_stack[128];
+	CDepTree* m_stack[MAX_STACK_LEN];
 	int 			m_stackSize;
 	int 			m_idxQ;
 	bool 			m_bMaybeGold;
