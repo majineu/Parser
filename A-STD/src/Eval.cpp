@@ -17,11 +17,9 @@ void HIndexes(CDepTree *pTree, vector<int> &hIdx)
   }
 }
 
-const wchar_t *pPuncs[] = {L",", L".",  L":", L"``", L"''", L"-LRB-", L"-RRB-", L"PU"};
 
 SEvalRec Eval(vector<SSentence *> &vSen,  vector<CDepTree *> &vTree,  vector<vector<int>> &hIdxVec)
 {
-	static std::set<wstring> puncSet(pPuncs, pPuncs + sizeof(pPuncs)/sizeof(*pPuncs));
 	assert(vSen.size() == vTree.size());
 	assert(vSen.size() == hIdxVec.size());
 	bool verbose = false;
@@ -50,7 +48,7 @@ SEvalRec Eval(vector<SSentence *> &vSen,  vector<CDepTree *> &vTree,  vector<vec
 
 		for (int k = 0; k < vSen[i]->Length(); ++k)
 		{
-			if (puncSet.find(vSen[i]->Tag(k)) == puncSet.end()) //wcscmp(vSen[i]->Tag(k), L"PU") != 0)
+			if (!CConfig::IsPunc(vSen[i]->Tag(k)))
 			{
 				er.totalWord += 1;
 				if (goldHidx[k] == hIdxVec[i][k])

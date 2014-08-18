@@ -77,8 +77,8 @@ public:
 	static bool SaveConfig(const string & strPath);
 	static bool LoadConfig(const string & strPath);
 	static bool ReadConfig(const char * pszConfigPath);
-  static bool IsPunc(const wchar_t *pwzKey);
 	static string BuildPath();
+  static bool IsPunc(const wstring &pwzKey)							{return puncsSet.find(pwzKey) != puncsSet.end();}
 };
 
 //--------------------------------------------------------------------------

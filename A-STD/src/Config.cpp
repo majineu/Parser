@@ -81,12 +81,6 @@ bool CConfig::SaveConfig(const string &strPath)
 }
 
 
-bool CConfig::
-IsPunc(const wchar_t *pwzKey)
-{
-  return puncsSet.find(pwzKey) != puncsSet.end();
-}
-
 
 bool CConfig::LoadConfig(const string &strPath)
 {
@@ -124,6 +118,8 @@ bool CConfig::LoadConfig(const string &strPath)
 	fprintf(stderr, "-----------------config------------------\n");
 	return true;
 }
+
+
 
 bool CConfig::
 ReadConfig(const char *pszPath)

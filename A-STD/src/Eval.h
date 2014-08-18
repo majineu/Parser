@@ -1,8 +1,8 @@
 #ifndef __EVAL_H__
 #define __EVAL_H__
+#include "Config.h"
 #include "DepTree.h"
 #include "SRParser.h"
-
 struct SEvalRec
 {
 	int			nCompl;

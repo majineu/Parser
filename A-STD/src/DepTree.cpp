@@ -1,6 +1,5 @@
 #include "DepTree.h"
 #include "Macros.h"
-//#include "code_conversion.h"
 
 template<typename T> CPool * List<T>::s_pool = NULL;
 const int CDepTree::ROOT_IDX  = -5;
@@ -18,7 +17,6 @@ MakeTree(CPool &rPool)
 {
 	CDepTree *pNew = (CDepTree *)rPool.Allocate(sizeof(CDepTree));
 	new (pNew)CDepTree();
-//	memset(pNew, 0, sizeof(*pNew));
 	return pNew;
 }
 
@@ -44,34 +42,9 @@ CopyTree(CDepTree *pTree, CPool &rPool)
 	return pNew;
 }
 
-bool CDepTree::operator==(CDepTree *pTree)
-{
-	/* note: all trees share one common SENTENCE */
-	bool verbose = false;
-	if (verbose == true)
-		fprintf(stderr, "l->m_nChildLeft %lu, r->m_nChildLeft %lu\n", 
-										 m_pLCList == NULL ? 0:m_pLCList->size(),
-										 m_pRCList == NULL ? 0:m_pRCList->size());//m_nChildLeft, pTree->m_nChildLeft);
-	
-	if (m_idx != pTree->m_idx)
-		return false;
-	
-	if ((m_pLCList == NULL) ^ (pTree->m_pLCList == NULL) ||
-			(m_pRCList == NULL) ^ (pTree->m_pRCList == NULL))
-		return false;
-
-	if (m_pLCList)
-		if (m_pLCList->size() != pTree->m_pLCList->size())
-			return false;
-
-	if (m_pRCList)
-		if (m_pRCList->size() != pTree->m_pRCList->size())
-			return false;
-	return true;
-}
 
 
-bool CDepTree::AddLeftChild(CDepTree * pTree)
+void CDepTree::AddLeftChild(CDepTree * pTree)
 {
 	assert(pTree != NULL);
 	if (m_pLCList == NULL)
@@ -80,11 +53,10 @@ bool CDepTree::AddLeftChild(CDepTree * pTree)
 	pTree->m_pParent = this;
 	pTree->m_pDir = RIGHT;
 	pTree->m_idxH = m_idx;
-	return true;
 }
 
 
-bool CDepTree::AddRightChild(CDepTree * pTree)
+void CDepTree::AddRightChild(CDepTree * pTree)
 {
 	assert(pTree != NULL);
 	if (m_pRCList == NULL)
@@ -93,7 +65,6 @@ bool CDepTree::AddRightChild(CDepTree * pTree)
 	pTree->m_pParent = this;
 	pTree->m_pDir = LEFT;
 	pTree->m_idxH = m_idx;
-	return true;
 }
 
 
@@ -127,9 +98,7 @@ PrintTree(FILE * fp,  const vector<wstring *> *pLabelVec)
 
 
 CDepTree *CDepTree::
-BuildTree(vector<int> &hIdxVec, 
-					SSentence *pSen,
-					CPool & rPool)
+BuildTree(vector<int> &hIdxVec, SSentence *pSen, CPool & rPool)
 {
 	if (pSen == NULL || hIdxVec.size() == 0)
 		return NULL;
@@ -238,3 +207,4 @@ CollectTreeNodes(vector<CDepTree* > & refVec)
 	refVec.clear();   // 2012-05-24
 	collectTreeNodesHelper(refVec); // 2012-05-24
 }
+

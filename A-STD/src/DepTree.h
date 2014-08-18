@@ -1,5 +1,4 @@
 #pragma once
-
 #include <cstdlib>
 #include <cstdio>
 #include <vector>
@@ -7,7 +6,6 @@
 #include <list>
 #include <map>
 #include "Macros.h"
-//#include "Scorer.h"
 #include "Sentence.h"
 using std::list;
 using std::vector;
@@ -100,9 +98,8 @@ public:
 														 SSentence *pSen,
 														 CPool &rPool);
 	
-	bool AddLeftChild(CDepTree * tree);
-	bool AddRightChild(CDepTree * tree);
-	bool operator == (CDepTree *); 
+	void AddLeftChild(CDepTree * tree);
+	void AddRightChild(CDepTree * tree);
 	void PrintTree(FILE *fp, const vector<wstring *> *pLabelVec);
 	void CollectTreeNodes(vector<CDepTree*> & refVec);
 	void DisplayTreeStructure(FILE *fp, int depth = 0, 
@@ -136,13 +133,6 @@ public:
 	void SetSen(_SENTENCE *pSen)					{m_pSen = pSen;}
 	_SENTENCE * GetSen()									{return m_pSen;}
 
-
-	// we add the right most ending punc: ,'')
-//	void AddPunc(int TID)
-//	{
-//		if (m_TID == -1 || SSenNode::IsEPunc(TID))
-//			m_TID = TID;
-//	}
 
 private:
 	void collectTreeNodesHelper(vector<CDepTree *> &refVec);

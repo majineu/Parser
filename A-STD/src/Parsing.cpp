@@ -109,12 +109,14 @@ bool Parsing(const char *pszModel,
 	
 	string configFile   = string(pszModel) + ".confg";
 	CConfig::LoadConfig(configFile);
+	
 	// initializing
 	bool insertMode	= false;
 	CFeatureCollector fExtor(insertMode);
 	CSRParser parser(CConfig::nBS, insertMode, &fExtor);	
 	if (LoadingModel(pszModel, fExtor, *parser.GetScorer()) == false)
 		return false;
+	
 	// loading sentences
 	CPool senPool;
 	List<CDepTree*>::SetPool(&senPool);
@@ -200,16 +202,18 @@ bool ParsingHis(const char *pszModel,
 	
 	string configFile   = string(pszModel) + ".confg";
 	CConfig::LoadConfig(configFile);
+	
 	// initializing
 	bool insertMode	= false;
 	CFeatureCollector fExtor(insertMode);
 	CSRParser parser(CConfig::nBS, insertMode, &fExtor);	
 	if (LoadingModel(pszModel, fExtor, *parser.GetScorer()) == false)
 		return false;
+
 	// loading sentences
 	CPool senPool;
 	List<CDepTree*>::SetPool(&senPool);
-	vector<SSentence *> senVec;// = CReader::ReadSentences(pszIn, senPool);
+	vector<SSentence *> senVec;
 	vector<CDepTree *> vtTest = CReader::ReadTrees(pszIn,	senPool,  
 																									&senVec, false); 
 
@@ -233,81 +237,3 @@ bool ParsingHis(const char *pszModel,
 }
 
 
-#if 0
-bool ParsingHis(const char *pszModel, 
-								const char *pszGold, 
-								const char *pszOut, 
-								bool bEng)
-{
-  FILE *fpRes = fopen(pszOut, "w");
-  //FILE *fpHis = fopen((string(pszOut) + ".his").c_str(), "w");
-	if (fpRes == NULL)
-	{
-		fprintf(stderr, "Error: open %s failed\n", pszOut);
-		return false;
-	}
-
-	bool insertMode	= false;
-	bool fVerbose = false;
-	bool pVerbose = false;
-	
-	// initializing
-	Perceptron::CSparseScorer scorer;				// load scorer
-	CTemplateManager tMgr;
-//	CFeatureExtractor extor(&tMgr, insertMode, fVerbose);
-  IFExtractor *pExtor = NULL;
-  if (bEng == true)
-    pExtor = new CEnFExtractor(&tMgr, insertMode, fVerbose);
-  else
-    pExtor = new CChFExtractor(&tMgr, insertMode, fVerbose);
-
-//  CBaseExtractor *pExtor = new CEnExtractor(&tMgr, insertMode, fVerbose);
-
-	if (LoadingModel(pszModel, tMgr, *pExtor, scorer) == false)
-		return false;
-
-  scorer.SetAvgMode(true);
-//  CBaseParser *pParser = new CDepCollector(pExtor, &scorer, pVerbose, CConfig::nBS);
-	CEasyFirstParser parser(pExtor, &scorer, pVerbose, CConfig::nBS);
-
-
-	// loading sentences
-	CPool goldPool, localPool;
-	CDepTree::SetPool(&goldPool);
-	List<CDepTree *>::SetPool(&goldPool);
-  vector<CDepTree *> goldTrees;
-  vector<SSentence *> sentences;
-  goldTrees = CReader::ReadTrees(pszGold,  goldPool,  &sentences);
-  CDepTree::SetPool(&localPool);
-  parser.SetHisFile((string(pszOut) + ".his").c_str());
-  for (size_t i = 0; i < sentences.size(); ++i)
-  {
-    if (i % 200 == 0)
-      fprintf(stderr, "%lu\r", i);
-    CDepTree *pTree = nullptr;
-
-
-    if (CConfig::bNoPunc == true)
-      pTree = parser.ParsingHisNoPunc(sentences[i], goldTrees[i]);
-    else
-      pTree = parser.ParsingHis(sentences[i], goldTrees[i]);
-    
-    vector<int> hIdxes;
-    HIndexes(pTree, hIdxes);
-    for (size_t idx = 0; idx < hIdxes.size(); ++idx)
-      fprintf(fpRes,"%s\t%s\t%d\tNULL\n", 
-      CCodeConversion::UnicodeToUTF8(sentences[i]->Word(idx)).c_str(), 
-      CCodeConversion::UnicodeToUTF8(sentences[i]->Tag(idx)).c_str(), 
-              hIdxes[idx] == CDepTree::ROOT_IDX ? 0: (hIdxes[idx] + 1));
-    
-    //pTree->PrintTree(fpRes, NULL);
-    fprintf(fpRes, "\n");
-  }
-
-  delete pExtor;
-  return true;
-}
-
-
-
-#endif

@@ -130,18 +130,6 @@ struct SSentence
 		fwprintf(fp, L"\n");
 	}
 
-#if 0
-	void SetTags(CPool &rPool, vector<wstring> &tags)
-	{
-		assert((int)tags.size() == m_len);
-		for (size_t i = 0; i < tags.size(); ++i)
-		{
-			m_pNodes[i]->m_pwzTag = (wchar_t *)rPool.Allocate(sizeof(wchar_t) * (tags[i].size() + 1));
-			wcscpy(m_pNodes[i]->m_pwzTag, tags[i].c_str()); 
-			m_pNodes[i]->m_pwzTag[tags[i].size()] = 0;
-		}
-	}
-#endif
 
 	SSentence()
 	{
