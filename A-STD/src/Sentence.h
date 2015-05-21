@@ -61,6 +61,7 @@ struct SSenNode
 	static wstring GetKey(int id)						{return wstring(s_nbW.GetKey(id)->c_str());}
 	static int  GetId(const wstring &key)		{return s_nbW.GetId(key,false);}
 	static bool IsPunc(int id)							{return s_sPunc.find(id) != s_sPunc.end();}
+  static bool IsNonBEPunc(int id)         {return IsPunc(id)  && !IsBEPunc(id);}
 	static bool IsBPunc(int id)							{return s_sBPunc.find(id) != s_sBPunc.end();}
 	static bool IsEPunc(int id)							{return s_sEPunc.find(id) != s_sEPunc.end();}
 	static bool IsBEPunc(int id)						{return IsBPunc(id) || IsEPunc(id);}

@@ -10,7 +10,7 @@ nRound							30
 nBeamSize						1	
 
 :: can be either top_one, all,  
-prefix							RMNearBE_SepOnly_noHpy	
+prefix							bug_fix
 
 :: dynamic oracle related stuff
 bPVerbose						false	

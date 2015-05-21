@@ -1,0 +1,152 @@
+Iteration 0:
+Training Set:
+total 34397, sen 1594, corr 31082, compl 634, root 1479, acc 90.36, compl rate 39.77, root acc 92.79
+Dev set:
+total 35386, sen 1700, corr 31647, compl 602, root 1554, acc 89.43, compl rate 35.41, root acc 91.41
+Test set:
+total 49749, sen 2416, corr 44270, compl 830, root 2185, acc 88.99, compl rate 34.35, root acc 90.44
+
+Iteration 1:
+Training Set:
+total 34397, sen 1594, corr 31649, compl 774, root 1495, acc 92.01, compl rate 48.56, root acc 93.79
+Dev set:
+total 35386, sen 1700, corr 31928, compl 654, root 1565, acc 90.23, compl rate 38.47, root acc 92.06
+Test set:
+total 49749, sen 2416, corr 44737, compl 906, root 2201, acc 89.93, compl rate 37.50, root acc 91.10
+
+Iteration 2:
+Training Set:
+total 34397, sen 1594, corr 32071, compl 887, root 1513, acc 93.24, compl rate 55.65, root acc 94.92
+Dev set:
+total 35386, sen 1700, corr 32073, compl 676, root 1566, acc 90.64, compl rate 39.76, root acc 92.12
+Test set:
+total 49749, sen 2416, corr 44993, compl 945, root 2219, acc 90.44, compl rate 39.11, root acc 91.85
+
+Iteration 3:
+Training Set:
+total 34397, sen 1594, corr 32318, compl 942, root 1516, acc 93.96, compl rate 59.10, root acc 95.11
+Dev set:
+total 35386, sen 1700, corr 32132, compl 685, root 1572, acc 90.80, compl rate 40.29, root acc 92.47
+Test set:
+total 49749, sen 2416, corr 45093, compl 965, root 2225, acc 90.64, compl rate 39.94, root acc 92.09
+
+Iteration 4:
+Training Set:
+total 34397, sen 1594, corr 32551, compl 1014, root 1523, acc 94.63, compl rate 63.61, root acc 95.55
+Dev set:
+total 35386, sen 1700, corr 32192, compl 695, root 1569, acc 90.97, compl rate 40.88, root acc 92.29
+Test set:
+total 49749, sen 2416, corr 45145, compl 963, root 2232, acc 90.75, compl rate 39.86, root acc 92.38
+
+Iteration 5:
+Training Set:
+total 34397, sen 1594, corr 32760, compl 1074, root 1534, acc 95.24, compl rate 67.38, root acc 96.24
+Dev set:
+total 35386, sen 1700, corr 32242, compl 697, root 1572, acc 91.12, compl rate 41.00, root acc 92.47
+Test set:
+total 49749, sen 2416, corr 45224, compl 973, root 2239, acc 90.90, compl rate 40.27, root acc 92.67
+
+Iteration 6:
+Training Set:
+total 34397, sen 1594, corr 32897, compl 1106, root 1534, acc 95.64, compl rate 69.39, root acc 96.24
+Dev set:
+total 35386, sen 1700, corr 32264, compl 700, root 1572, acc 91.18, compl rate 41.18, root acc 92.47
+Test set:
+total 49749, sen 2416, corr 45261, compl 979, root 2244, acc 90.98, compl rate 40.52, root acc 92.88
+
+Iteration 7:
+Training Set:
+total 34397, sen 1594, corr 33017, compl 1144, root 1541, acc 95.99, compl rate 71.77, root acc 96.68
+Dev set:
+total 35386, sen 1700, corr 32296, compl 708, root 1574, acc 91.27, compl rate 41.65, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45282, compl 985, root 2247, acc 91.02, compl rate 40.77, root acc 93.00
+
+Iteration 8:
+Training Set:
+total 34397, sen 1594, corr 33139, compl 1181, root 1549, acc 96.34, compl rate 74.09, root acc 97.18
+Dev set:
+total 35386, sen 1700, corr 32326, compl 717, root 1574, acc 91.35, compl rate 42.18, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45339, compl 985, root 2248, acc 91.14, compl rate 40.77, root acc 93.05
+
+Iteration 9:
+Training Set:
+total 34397, sen 1594, corr 33235, compl 1210, root 1554, acc 96.62, compl rate 75.91, root acc 97.49
+Dev set:
+total 35386, sen 1700, corr 32352, compl 720, root 1574, acc 91.43, compl rate 42.35, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45354, compl 991, root 2239, acc 91.17, compl rate 41.02, root acc 92.67
+
+Iteration 10:
+Training Set:
+total 34397, sen 1594, corr 33322, compl 1242, root 1559, acc 96.87, compl rate 77.92, root acc 97.80
+Dev set:
+total 35386, sen 1700, corr 32363, compl 719, root 1573, acc 91.46, compl rate 42.29, root acc 92.53
+Test set:
+total 49749, sen 2416, corr 45352, compl 989, root 2238, acc 91.16, compl rate 40.94, root acc 92.63
+
+Iteration 11:
+Training Set:
+total 34397, sen 1594, corr 33418, compl 1274, root 1560, acc 97.15, compl rate 79.92, root acc 97.87
+Dev set:
+total 35386, sen 1700, corr 32382, compl 726, root 1574, acc 91.51, compl rate 42.71, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45365, compl 988, root 2241, acc 91.19, compl rate 40.89, root acc 92.76
+
+Iteration 12:
+Training Set:
+total 34397, sen 1594, corr 33509, compl 1298, root 1566, acc 97.42, compl rate 81.43, root acc 98.24
+Dev set:
+total 35386, sen 1700, corr 32380, compl 724, root 1574, acc 91.51, compl rate 42.59, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45398, compl 989, root 2241, acc 91.25, compl rate 40.94, root acc 92.76
+
+Iteration 13:
+Training Set:
+total 34397, sen 1594, corr 33565, compl 1321, root 1568, acc 97.58, compl rate 82.87, root acc 98.37
+Dev set:
+total 35386, sen 1700, corr 32389, compl 725, root 1573, acc 91.53, compl rate 42.65, root acc 92.53
+Test set:
+total 49749, sen 2416, corr 45399, compl 991, root 2243, acc 91.26, compl rate 41.02, root acc 92.84
+
+Iteration 14:
+Training Set:
+total 34397, sen 1594, corr 33617, compl 1334, root 1571, acc 97.73, compl rate 83.69, root acc 98.56
+Dev set:
+total 35386, sen 1700, corr 32402, compl 724, root 1576, acc 91.57, compl rate 42.59, root acc 92.71
+Test set:
+total 49749, sen 2416, corr 45413, compl 995, root 2243, acc 91.28, compl rate 41.18, root acc 92.84
+
+Iteration 15:
+Training Set:
+total 34397, sen 1594, corr 33661, compl 1352, root 1572, acc 97.86, compl rate 84.82, root acc 98.62
+Dev set:
+total 35386, sen 1700, corr 32428, compl 734, root 1578, acc 91.64, compl rate 43.18, root acc 92.82
+Test set:
+total 49749, sen 2416, corr 45421, compl 1000, root 2240, acc 91.30, compl rate 41.39, root acc 92.72
+
+Iteration 16:
+Training Set:
+total 34397, sen 1594, corr 33730, compl 1369, root 1575, acc 98.06, compl rate 85.88, root acc 98.81
+Dev set:
+total 35386, sen 1700, corr 32424, compl 734, root 1578, acc 91.63, compl rate 43.18, root acc 92.82
+Test set:
+total 49749, sen 2416, corr 45421, compl 997, root 2244, acc 91.30, compl rate 41.27, root acc 92.88
+
+Iteration 17:
+Training Set:
+total 34397, sen 1594, corr 33781, compl 1384, root 1578, acc 98.21, compl rate 86.83, root acc 99.00
+Dev set:
+total 35386, sen 1700, corr 32425, compl 733, root 1574, acc 91.63, compl rate 43.12, root acc 92.59
+Test set:
+total 49749, sen 2416, corr 45409, compl 993, root 2242, acc 91.28, compl rate 41.10, root acc 92.80
+
+Iteration 18:
+Training Set:
+total 34397, sen 1594, corr 33822, compl 1403, root 1579, acc 98.33, compl rate 88.02, root acc 99.06
+Dev set:
+total 35386, sen 1700, corr 32414, compl 730, root 1572, acc 91.60, compl rate 42.94, root acc 92.47
+Test set:
+total 49749, sen 2416, corr 45408, compl 991, root 2238, acc 91.27, compl rate 41.02, root acc 92.63
+

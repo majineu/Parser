@@ -1,18 +1,17 @@
 #pragma once
-#include "DepTree.h"
-#include "Pool.h"
-#include "FeatureCollector.h"
-#include "SparseScorer.h"
-
 #include <map>
 #include <sstream>
 #include <vector>
 #include <queue>
 #include <algorithm>
 
+#include "DepTree.h"
+#include "Pool.h"
+#include "FeatureCollector.h"
+#include "SparseScorer.h"
 
-struct SStatis
-{
+
+struct SStatis {
 	int m_nUp;
 	int m_nEarly;
 	int m_nPuUps;
@@ -22,8 +21,7 @@ struct SStatis
 
 typedef std::priority_queue<CState*, vector<CState*>, CState >	PRIORITY_Q;
 
-class CSRParser
-{
+class CSRParser {
 public:
 	CSRParser(size_t bs, bool insertMode, CFeatureCollector *pCF);//, bool useDis = false);
 	~CSRParser(void);
@@ -49,21 +47,18 @@ private:
 									 int classId, double outcomeScore);	
 	OUTCOME_ID updateGoldState(CDepTree * pGoldTree, CState * pGoldState, 
 														 vector<CDepTree*> & pTreeNodeVec);
-	double updateHeap(CState *pState)
-	{
+	double updateHeap(CState *pState) {
 		if((int)m_heap.size() == m_nBeamSize)
 			m_heap.pop();
 		m_heap.push(pState);
 		return m_heap.top()->GetScore();
 	}
 
-	void dumpHeap(bool verbose)
-	{	
+	void dumpHeap(bool verbose) {	
 		if (verbose)
 			fprintf(stderr, "beam candidates:\n");
 		freeBeam();
-		while (!m_heap.empty())
-		{
+		while (!m_heap.empty()) {
 			if (verbose)
 				m_heap.top()->PrintState(&CIDMap::GetDepLabelVec());
 
