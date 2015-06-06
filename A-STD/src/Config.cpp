@@ -42,6 +42,7 @@ double CConfig::fRate					= 0.1;
 
 string	CConfig:: strNull			= "null";
 string	CConfig:: strTrainPath		= strNull;
+string  CConfig:: strTrainingMethod("standard");
 string	CConfig:: strDevPath			= strNull;
 string	CConfig:: strTestPath			= strNull;
 string	CConfig:: strTempPath			= strNull;
@@ -242,13 +243,13 @@ ReadConfig(const char *pszPath)
 				CConfig::vHiddenType.push_back(pType);
 				pType = strtok(NULL, " \t\r\n");
 			}
-		}
-
-		else if (strcmp(pKey, "devPath") == 0)
+		} else if (strcmp(pKey, "TrainingMethod") == 0) {
+      CConfig::strTrainingMethod = pVal;
+      fprintf(stderr, "Training method: %s\n", 
+          CConfig::strTrainingMethod.c_str());
+    } else if (strcmp(pKey, "devPath") == 0) {
 			CConfig::strDevPath	= pVal;
-
-		else if (strcmp(pKey, "updateT") == 0)
-		{
+    } else if (strcmp(pKey, "updateT") == 0) {
 			CConfig::ut = strcmp(pVal, "perSen") == 0 ? CConfig::PER_SEN : CConfig::PER_ITER;
 			fprintf(stderr, "Inc t: %s\n", CConfig::ut == CConfig::PER_SEN ? "PerSen":"PerIter");
 		}

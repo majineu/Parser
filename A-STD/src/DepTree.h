@@ -102,25 +102,26 @@ public:
 	void AddRightChild(CDepTree * tree);
 	void PrintTree(FILE *fp, const vector<wstring *> *pLabelVec);
 	void CollectTreeNodes(vector<CDepTree*> & refVec);
+	void CollectTreeNodes(vector<const CDepTree*> & refVec) const;
 	void DisplayTreeStructure(FILE *fp, int depth = 0, 
 											 		  const vector<wstring *> *pLabelVec = NULL,
 											 		  int dir = 0,
-														vector<bool> *pVWrong = NULL);
+														vector<bool> *pVWrong = NULL) const;
 	
-	int GetDepId()												{return m_dlID;}
-	int PuncID()													{return m_puncID;}
-	int PuncNum()													{return m_nSep;}
-	int Index()														{return m_idx;}
-	int HIndex()													{return m_idxH;}
-	int GetLCNum()												{return m_pLCList == NULL ? 0 : m_pLCList->size();}
-	int GetRCNum()												{return m_pRCList == NULL ? 0 : m_pRCList->size();}
-	bool IsLeaf()													{return GetLCNum() + GetRCNum() == 0;}	
+	int GetDepId() const									{return m_dlID;}
+	int PuncID() const 										{return m_puncID;}
+	int PuncNum() const										{return m_nSep;}
+	int Index() const										  {return m_idx;}
+	int HIndex() const										{return m_idxH;}
+	int GetLCNum() const									{return m_pLCList == NULL ? 0 : m_pLCList->size();}
+	int GetRCNum() const					  			{return m_pRCList == NULL ? 0 : m_pRCList->size();}
+	bool IsLeaf()	const										{return GetLCNum() + GetRCNum() == 0;}	
 	List<CDepTree*> * GetLChildList()			{return m_pLCList;}
 	List<CDepTree*> * GetRChildList()			{return m_pRCList;}
 	
 	CDepTree * GetPi()										{return m_pParent;}
-	CDepTree * GetRC()										{return m_pRCList == NULL ? NULL : m_pRCList->back();}
-	CDepTree * GetLC()										{return m_pLCList == NULL ? NULL : m_pLCList->back();}
+	CDepTree * GetRC()	const							{return m_pRCList == NULL ? NULL : m_pRCList->back();}
+	CDepTree * GetLC()	const							{return m_pLCList == NULL ? NULL : m_pLCList->back();}
 	CDepTree * GetR2C()										{return GetRCNum() < 2 ? NULL: (*m_pRCList)[m_pRCList->size() - 2];}
 	CDepTree * GetL2C()										{return GetLCNum() < 2 ? NULL: (*m_pLCList)[m_pLCList->size() - 2];}
 
@@ -136,6 +137,7 @@ public:
 
 private:
 	void collectTreeNodesHelper(vector<CDepTree *> &refVec);
+	void collectTreeNodesHelper(vector<const CDepTree *> &refVec) const;
 
 private:
 	enum PARENT_DIRECTION{LEFT, RIGHT}  m_pDir;

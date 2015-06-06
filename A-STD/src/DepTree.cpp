@@ -129,23 +129,24 @@ BuildTree(vector<int> &hIdxVec, SSentence *pSen, CPool & rPool)
 		}
 	}
 
+
 	// construct tree structure
-	for (int i = 1; i < (int)hIdxVec.size(); ++i)
+	for (int i = 1; i < (int)hIdxVec.size(); ++i) {
 		if (hIdxVec[i] != -1 && hIdxVec[i] < i)
 			treeVec[hIdxVec[i]]->AddRightChild(treeVec[i]);
+  }
 	
 	for (int i = (int)hIdxVec.size() - 1; i !=  -1; --i)
 		if (hIdxVec[i] != -1 && hIdxVec[i] > i)
 			treeVec[hIdxVec[i]]->AddLeftChild(treeVec[i]);
-	
+
 	return	treeVec[rootOft]; 
 }
 
 void CDepTree::
 DisplayTreeStructure(FILE *fp, int depth, 
 										 const vector<wstring *> *pLabelVec,
-										 int dir,	vector<bool> * pVWrong)
-{
+										 int dir,	vector<bool> * pVWrong) const {
 	if (m_pLCList != NULL)
 	{
 		List<CDepTree*> ::iterator it = m_pLCList->rbegin(), end = m_pLCList->rend();
@@ -182,19 +183,16 @@ DisplayTreeStructure(FILE *fp, int depth,
 }
 
 void CDepTree::
-collectTreeNodesHelper(vector<CDepTree*> &refVec)
-{
+collectTreeNodesHelper(vector<CDepTree*> &refVec) {
 	List<CDepTree*> ::iterator it, end;
-	if(m_pLCList != NULL)
-	{
+	if(m_pLCList != NULL) {
 		it = m_pLCList->rbegin(), end = m_pLCList->rend();
 		for(; it != end; -- it)
 			(*it)->collectTreeNodesHelper(refVec);
 	}
 
 	refVec.push_back(this);
-	if(m_pRCList != NULL)
-	{
+	if(m_pRCList != NULL) {
 		it = m_pRCList->begin(), end = m_pRCList->end();
 		for(; it != end; ++it)
 			(*it)->collectTreeNodesHelper(refVec);
@@ -202,8 +200,30 @@ collectTreeNodesHelper(vector<CDepTree*> &refVec)
 }
 
 void CDepTree::
-CollectTreeNodes(vector<CDepTree* > & refVec)
-{
+CollectTreeNodes(vector<CDepTree* > & refVec) {
+	refVec.clear();   // 2012-05-24
+	collectTreeNodesHelper(refVec); // 2012-05-24
+}
+
+void CDepTree::
+collectTreeNodesHelper(vector<const CDepTree*> &refVec) const {
+	List<CDepTree*> ::iterator it, end;
+	if(m_pLCList != NULL) {
+		it = m_pLCList->rbegin(), end = m_pLCList->rend();
+		for(; it != end; -- it)
+			(*it)->collectTreeNodesHelper(refVec);
+	}
+
+	refVec.push_back(this);
+	if(m_pRCList != NULL) {
+		it = m_pRCList->begin(), end = m_pRCList->end();
+		for(; it != end; ++it)
+			(*it)->collectTreeNodesHelper(refVec);
+	}
+}
+
+void CDepTree::
+CollectTreeNodes(vector<const CDepTree* > & refVec) const {
 	refVec.clear();   // 2012-05-24
 	collectTreeNodesHelper(refVec); // 2012-05-24
 }

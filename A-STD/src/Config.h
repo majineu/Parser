@@ -55,6 +55,7 @@ public:
 	static string	strTempPath;
 	static string	strModelPath;
 	static string	strTagLabelPath;
+  static string strTrainingMethod;
 	static string	strPrefix;
   static string strLogDir;
   static string strDropoutType;			// Base, Annaling and other types in the futher

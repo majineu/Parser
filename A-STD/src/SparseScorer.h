@@ -542,26 +542,22 @@ public:
 
 
 
-	bool UpdateParameter(int nPred, int *fids, OID_TYPE oid, FLOAT_TYPE learningRate)
+	bool UpdateParameter(const int nPred, const int *fids, 
+                       const OID_TYPE oid, 
+                       const FLOAT_TYPE learningRate)
 	{
-		for (int i = 0; i < nPred; ++i)
-		{
+		for (int i = 0; i < nPred; ++i) {
 			int gid = fids[i];
-			if (gid == unkId)
-				continue;
+			if (gid == unkId)	continue;
 
-			if (gid < (int)m_vecValPtrs.size())
-			{
-				if (m_vecValPtrs[gid] == NULL)
-				{
+			if (gid < (int)m_vecValPtrs.size()) {
+				if (m_vecValPtrs[gid] == NULL) {
 					if(m_insertMode == true)
 						m_vecValPtrs[gid] = ValAry::MakeValAry(m_pool, oid, learningRate, m_It * learningRate);
-				}
-				else
+				} else {
 					m_vecValPtrs[gid]->UpdateVal(m_pool, oid, learningRate, m_It * learningRate, m_insertMode);
-			}
-			else if (m_insertMode == true)
-			{
+        }
+      } else if (m_insertMode == true) {
 				m_vecValPtrs.resize((gid + 1) * 1.5, NULL);
 				m_vecValPtrs[gid] = ValAry::MakeValAry(m_pool, oid, learningRate, m_It * learningRate);
 			}
@@ -571,8 +567,10 @@ public:
 	
 
 	
-	bool UpdateParameter(int nPred,		int *goldFids,	size_t goldLabel,	int *guessFids, 
-						 size_t guessLabel,		FLOAT_TYPE learningRate = 1.0)
+	bool UpdateParameter(const int nPred,	const	int *goldFids,	
+                       const size_t goldLabel,	const int *guessFids, 
+						           const size_t guessLabel,		
+                       const FLOAT_TYPE learningRate = 1.0)
 	{
 		// rewarding gold
 		UpdateParameter(nPred,  goldFids, (OID_TYPE)goldLabel, learningRate);
@@ -582,18 +580,51 @@ public:
 		return true;
 	}
 
-
+  bool UpdateParameter(const vector<int> & features, 
+                       const size_t goldLabel, 
+                       const size_t guessLabel) {
+    UpdateParameter(features.size(), &features[0], goldLabel, 1.0);
+    UpdateParameter(features.size(), &features[0], guessLabel, -1.0);
+    return true;
+  }
 	
-	bool UpdateParameter(int nPredGold, int nPredWrong, int *goldFids, 
-							size_t goldLabel, int *guessFids,  size_t guessLabel, FLOAT_TYPE learningRate = 1.0)
-	{
+	bool UpdateParameter(const int nPredGold, const int nPredWrong, 
+                       const int *goldFids, const size_t goldLabel, 
+                       const int *guessFids,  const size_t guessLabel, 
+                       const FLOAT_TYPE learningRate = 1.0) {
 		UpdateParameter(nPredGold, goldFids, (OID_TYPE)goldLabel, learningRate);
 		UpdateParameter(nPredWrong, guessFids, (OID_TYPE)guessLabel, -learningRate);
 		return true;
 	}
 
 	
-	
+	size_t PredictLabel(const vector<int> & features, 
+                       vector<double> *scores) {
+    if (features.size() == 0) return 0; // by default
+    scores->resize(m_nOutcomeNum, 0.0);
+    std::fill(scores->begin(), scores->end(), 0.0);
+
+		for (size_t i = 0; i < features.size(); ++i) {
+			int gfid = features[i];
+			if (gfid == -1 || gfid >= (int)m_vecValPtrs.size() || 
+          m_vecValPtrs[gfid] == NULL)
+				continue;
+
+			int eleNum = m_vecValPtrs[gfid]->eleNum;
+			FLOAT_TYPE *pVal	= m_vecValPtrs[gfid]->pVals;
+			FLOAT_TYPE *pSumVal = m_vecValPtrs[gfid]->pSumVals;
+			OID_TYPE *pOid		= m_vecValPtrs[gfid]->pOids;
+			for (int k = 0; k < eleNum; ++k)
+				(*scores)[*pOid++] += m_avgMode == true ? 
+										((*pVal++) - (*pSumVal++)/m_It) : *pVal++;
+		}
+
+		size_t bestId = 0;
+		for (size_t i = 1; i < scores->size(); ++i)
+      if ((*scores)[bestId] < (*scores)[i]) bestId = i;
+		return bestId;
+  }
+
 	double Eval(int *PredIds, int nPred, int oid)
 	{
 		if (oid < 0 || oid >= (int)m_nOutcomeNum)
@@ -633,7 +664,7 @@ public:
   
 
 	
-	size_t Eval(int *PredIds, int nPred, vector<double> & oScoreVec)
+	size_t Eval(const int *PredIds, const int nPred, vector<double> & oScoreVec)
 	{
 		if (oScoreVec.size() != m_nOutcomeNum)
 			oScoreVec.resize(m_nOutcomeNum);

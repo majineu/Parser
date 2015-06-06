@@ -15,6 +15,8 @@ struct SStatis {
 	int m_nUp;
 	int m_nEarly;
 	int m_nPuUps;
+  int m_num_conflicts;
+  int m_num_shift;
 	void Reset() 							{memset(this, 0, sizeof(*this));}
 };
 
@@ -36,14 +38,28 @@ public:
 	typedef int ACTION_ID;
 	typedef int OUTCOME_ID;
 
+  CDepTree * ParsingGreedy(_SENTENCE *pSen);
+
 private:
 	void freeBeam()																			{m_Beam.clear();}
+  bool StandardTraining(_SENTENCE *pSen, CDepTree *pRef);
+  bool DynamicOracleGreedyTraining(_SENTENCE *pSen, CDepTree *pRef);
+  bool DynamicOracleGlobalTraining(_SENTENCE *pSen, CDepTree *pRef);
+  bool DynamicOracleExploreTraining(_SENTENCE *pSen, CDepTree *pRef);
 	void updateBeam(bool keepMaxEvent, bool verbose = false);
 	CDepTree* parsing(_SENTENCE *pSen);
 	
 	bool isGoldSurvive(CState & CandState, bool parsingComplete, 
 										 bool ignoreLabel = false);
-	bool updateState(CState *pState, _SENTENCE *pSen , 
+  
+  bool IsGoldLabel(const CState & state, const size_t label,
+                   const vector<CDepTree*> & nodes);
+
+  size_t BestGoldLabel(const CState & state, 
+                       const vector<double> & scores,
+                       const vector<CDepTree *> & nodes);
+	
+  bool updateState(CState *pState, _SENTENCE *pSen , 
 									 int classId, double outcomeScore);	
 	OUTCOME_ID updateGoldState(CDepTree * pGoldTree, CState * pGoldState, 
 														 vector<CDepTree*> & pTreeNodeVec);

@@ -44,8 +44,7 @@ SEvalRec Eval(vector<SSentence *> &vSen,
 
 bool Parsing(CSRParser &rPar,  
 						 vector<SSentence *> &vSen, 
-						 vector<vector<int> > &hidxVec)
-{
+						 vector<vector<int> > &hidxVec) {
 	bool verbose = false;
 	if (vSen.size() == 0)
 		return false;
@@ -55,15 +54,17 @@ bool Parsing(CSRParser &rPar,
 	int totalLen = 0;
 	int senId = 0;
 
-	for (SSentence *pSen: vSen)
-	{
+	for (SSentence *pSen: vSen) {
 		totalLen += pSen->Length();
     CDepTree *pTree = nullptr;
-    pTree = rPar.Parsing(pSen);
-		HIndexes(pTree, hidxVec[senId ++]);
+    if (CConfig::nBS == 1) {
+      pTree = rPar.ParsingGreedy(pSen);
+    } else {
+      pTree = rPar.Parsing(pSen);
+    }
 
-		if (verbose == true)
-		{
+		HIndexes(pTree, hidxVec[senId ++]);
+		if (verbose == true) {
 			pTree->DisplayTreeStructure(stderr, 0);
 			for (int i = 0; i < (int)hidxVec[senId-1].size(); ++i)
 				fprintf(stderr, "%d, %d\n", i, hidxVec[senId - 1][i]);

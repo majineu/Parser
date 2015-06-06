@@ -134,8 +134,9 @@ void Training(const char * pszCfg)
 		fprintf(stderr, "%d sen, %.2f secs, ", (int)randomIds.size(), secs);
 
 		SStatis statis = parser.Statis();
-		fprintf(stderr, "%lu sen, ups %d, early ups %d, pu ups %d,  failed %d\r", 
-										randomIds.size(),		statis.m_nUp, 	statis.m_nEarly,  statis.m_nPuUps,  nFail);
+		fprintf(stderr, "%lu sen, ups %d, early ups %d, conflicts %d, conflict_shift %d,  failed %d\r", 
+										randomIds.size(),		statis.m_nUp, 	statis.m_nEarly,  
+                    statis.m_num_conflicts, statis.m_num_shift,  nFail);
 
 		// evaluate gold sentences
 		fprintf(stderr, "\nEvaluating on training set ....\n");

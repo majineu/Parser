@@ -4,6 +4,7 @@
 #include <cassert>
 #include "Hash.h"
 #include "Pool.h"
+#include "util.h"
 
 using std::vector;
 
@@ -239,6 +240,16 @@ public:
 	static size_t GetOutcomeNum()														{return m_outcomeVec.size();}
 	static size_t GetDepLabelNum()													{return m_depLabelMap.size();	}
 
+  static void PrintClassLabel(const int label) {
+    int dependency_label = 0;
+		CIDMap::ACTION_TYPE action = CIDMap::Interprate(label, dependency_label);
+		fprintf(stderr, "predict Action %s, dependency_label %s\n", 
+            action == CIDMap::SHIFT ? "SHIFT" :
+            action == CIDMap::LEFT_REDUCE ? "LEFT_REDUCE" : "RIGHT_REDUCE",
+					  action == 0 ? 
+            "NULL": wstr2utf8(CIDMap::GetDepLabel(dependency_label)).c_str());
+  }
+
 	static const wchar_t * GetPredict(size_t fid)
 	{
 		if (fid < m_predVec.size())
@@ -290,6 +301,15 @@ public:
 		}
 	}
 
+  static ACTION_TYPE ClassLabel2Action(const int classId) {
+		if (classId == 0) return SHIFT;
+		if (classId > m_nLabel) {
+			return RIGHT_REDUCE;
+		} else {
+			return LEFT_REDUCE;
+    }
+  }
+
 	static ACTION_TYPE Interprate(const int classId,   
 															  int &label)
 	{
@@ -297,13 +317,12 @@ public:
 		if (classId == 0)
 			return SHIFT;
 		
-		if (classId > m_nLabel)
-		{
+		if (classId > m_nLabel) {
 			label -= m_nLabel;
 			return RIGHT_REDUCE;
-		}
-		else
+		} else {
 			return LEFT_REDUCE;
+    }
 	}
 
 	

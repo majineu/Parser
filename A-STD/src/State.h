@@ -13,32 +13,33 @@ public:
 	~CState()																								{memset(this, 0, sizeof(*this));}
 	
 	
-	static CState * CopyState(CState *pState, CPool &rPool, bool cpEvent)
-	{
+	static CState * CopyState(CState *pState, CPool &rPool, bool cpEvent) {
 		CState *pNew = (CState *)rPool.Allocate(sizeof(CState));
 		new (pNew)CState(pState, rPool, cpEvent);
 		return pNew;
 	}
 
-	static CState * MakeState(CPool &rPool)
-	{
+	static CState * MakeState(CPool &rPool) {
 		CState *pNew = (CState *)rPool.Allocate(sizeof(CState));
 		new (pNew)CState();
 		return pNew;
 	}
 
-	void DisAction(FILE *fp = stderr);	
+	void DisAction(FILE *fp = stderr) const;	
 	void PrintState(vector<wstring *> *pVLabels = NULL,
-									FILE *fp = stderr);
+									FILE *fp = stderr) const;
 	
 	
 	SEvent * GetAccEvent()																	{return pAccHead;}
 	SEvent * GetLastCorrEvent()															{return pAccTail;}
 	SEvent ** GetAccEventPtr()															{return &pAccHead;}
-	CDepTree * GetTopStack()																{return m_stack[m_stackSize - 1];}
-	int GetQIndex()																					{return m_idxQ;}
-	int	GetStackLen()																				{return m_stackSize;}
-	double GetScore()																				{return m_fScore;}
+	CDepTree * GetTopStack() const													{return m_stack[m_stackSize - 1];}
+  CDepTree * GetStack1() const                            {assert(m_stackSize > 1); return m_stack[m_stackSize - 2];}
+	int GetQIndex() const																		{return m_idxQ;}
+	int	GetStackLen()	const																	{return m_stackSize;}
+  const CDepTree** GetStack() const                       {return (const CDepTree **)m_stack;}                   
+	
+  double GetScore()	const																	{return m_fScore;}
 	double IncreaseScore(double s)													{return m_fScore += s;}
 	bool StackEmpty()																				{return m_stackSize == 0;}
 	bool IsPossible()																				{return m_bMaybeGold;}
@@ -47,10 +48,28 @@ public:
 	void ClearStack()																				{m_stackSize = 0, memset(m_stack, 0, sizeof(m_stack));}
 	void AddAccEvent(SEvent *pEvent)												{pAccTail = pAccHead = pEvent;}
 	bool IsGold(CState *pState, bool ignoreDLabel = false);
-	
 
-	void Shift (CPool &rPool, SSentence *pSen)
-	{
+  // Goldberg et al., 2014 (Dynamic oracle).
+  // Cost of each element on the stack, from top to bottum.
+  int StackCosts(const vector<CDepTree *> &gold_nodes, 
+                 vector<int> * costs) const;
+
+  // Update cost after an action, here labels are ignored.
+  void UpdateCost(const vector<CDepTree *> &gold_nodes,
+                  const CIDMap::ACTION_TYPE action,
+                  const vector<int> & costs,
+                  const int old_cost_sum,
+                  int * cost_sum,
+                  int * top_stack_cost) const;
+
+  // Build left and right stacks.
+  // Note that left_stack[0] and right_stack[0] points to the same element.
+  void BuildStacks(const vector<CDepTree *> &nodes,
+                   CIDMap::ACTION_TYPE action,
+                   vector<int> *left_stack, 
+                   vector<int> *right_stack) const;
+
+	void Shift (CPool &rPool, SSentence *pSen) {
 		CDepTree * pTree = CDepTree::MakeTree(rPool); 
 		pTree->SetIndex(m_idxQ);
 		pTree->SetSen(pSen);
@@ -59,6 +78,13 @@ public:
 		m_stack[m_stackSize ++] = pTree;
 	}
 
+  bool AllowReduce() const {return m_stackSize > 1;}
+  bool AllowShift(int sentence_length) const {return m_idxQ < sentence_length;}
+
+  bool AllowAction(CIDMap::ACTION_TYPE action, int sentence_length) const {
+    if (action == CIDMap::SHIFT) return AllowShift(sentence_length);
+    return AllowReduce();
+  }
 
   void MatchBEPunc(CDepTree * p0, CDepTree *p1, CDepTree * pOut) {
 		int nSep1 = p1->PuncNum();
@@ -168,11 +194,12 @@ public:
     }
 	}
 
-	void GetTopThreeElements (CDepTree ** ppTree0) {
+	void GetTopThreeElements (CDepTree ** ppTree0) const {
 		memset(ppTree0, 0, sizeof(CDepTree*) * 3);
 		for (int i = 0; m_stackSize - i - 1 >=0 && i < 3; ++i)
 			ppTree0[i] = m_stack[m_stackSize - i - 1];
 	}
+
 
 private:
 	CDepTree* m_stack[MAX_STACK_LEN];
