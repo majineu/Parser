@@ -1,0 +1,32 @@
+GTEST_DIR = /Users/Ji/Tools/gtest-1.7.0/
+CPPFLAGS += -isystem $(GTEST_DIR)/include
+LIB = $(GTEST_DIR)/libgtest.a
+
+CC=clang++
+#CFLAGS=-c -Wall -g -std=c++11	 
+CFLAGS=-c -Wall -O3 -std=c++11 
+LDFLAGS= 
+
+SOURCES=Template.cpp DynamicOracleTest.cpp DynamicOracle.cpp Maps.cpp State.cpp Train.cpp Eval.cpp Sentence.cpp Parsing.cpp IO.cpp FeatureCollector.cpp DepTree.cpp Config.cpp util.cpp Pool.cpp SRParser.cpp # Scorer.cpp
+
+OBJECTS=$(SOURCES:.cpp=.o)
+
+EXECUTABLE=unit_test
+
+build: all
+
+test: build 
+	./$(EXECUTABLE)
+
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) -I$(GTEST_DIR)/include/ $(OBJECTS) $(GTEST_DIR)/libgtest.a -o $@ 
+
+.cpp.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+clean:
+	rm *.o
+	rm unit_test
+
